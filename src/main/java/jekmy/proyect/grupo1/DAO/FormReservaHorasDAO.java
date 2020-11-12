@@ -7,7 +7,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.Normalizer;
 
 public class FormReservaHorasDAO {
     private Connection conexion;
@@ -16,13 +15,15 @@ public class FormReservaHorasDAO {
         this.conexion = ConnectionManager.obtenerConexion();
     }
 
-    public FormReservaHoras ReservasPorEmailUsuario(String email)throws SQLException {
+    public FormReservaHoras ObtenerUsuarios(String email)throws SQLException {
         String sql = "select * from grupo1_registro where email = ?";
         PreparedStatement ps = conexion.prepareStatement(sql);
         ps.setString(1, email);
         ResultSet rs = ps.executeQuery();
         while (rs.next()) {
-            FormReservaHoras FRS = new FormReservaHoras(rs.getString("nombre_completo"), rs.getString("email"),
+            FormReservaHoras FRS = new FormReservaHoras(
+                    rs.getString("nombre_completo"),
+                    rs.getString("email"),
                     rs.getString("telefono"),
                     rs.getString("pass"), rs.getInt("privilegio")
             );
@@ -30,7 +31,7 @@ public class FormReservaHorasDAO {
         }
         return null;
     }
-    public void InsertarPeticion(FormReservaHoras F) throws SQLException {
+    public void RegistroUsuarios(FormReservaHoras F) throws SQLException {
         String sql = "INSERT INTO grupo1_registro (nombre_completo,email, telefono, pass, privilegio) "
                 + "values (?, ? , ? , ?, ?)";
         PreparedStatement ps = conexion.prepareStatement(sql);
@@ -39,9 +40,8 @@ public class FormReservaHorasDAO {
         ps.setString(3,F.getTelefono());
         ps.setString(4,F.getPass());
         ps.setInt(5,F.getPrivilegio());
-        ResultSet rs = ps.executeQuery();
 
-        ps.execute();
+        ps.executeUpdate();
 
 
 
@@ -74,4 +74,5 @@ public class FormReservaHorasDAO {
         ps.setString(2, telefono);
         ps.executeUpdate();
     }
+
 }

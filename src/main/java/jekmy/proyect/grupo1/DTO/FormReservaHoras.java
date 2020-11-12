@@ -1,6 +1,12 @@
 package jekmy.proyect.grupo1.DTO;
 
+import jekmy.proyect.grupo1.ConnectionManager;
+
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 
 public class FormReservaHoras {
@@ -59,19 +65,6 @@ public class FormReservaHoras {
     public void setPrivilegio(Integer privilegio) {
         this.privilegio = privilegio;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        FormReservaHoras that = (FormReservaHoras) o;
-        return nombre_completo.equals(that.nombre_completo) &&
-                email.equals(that.email) &&
-                telefono.equals(that.telefono) &&
-                pass.equals(that.pass) &&
-                privilegio.equals(that.privilegio);
-    }
-
     @Override
     public int hashCode() {
         return Objects.hash(nombre_completo, email, telefono, pass, privilegio);
@@ -87,4 +80,14 @@ public class FormReservaHoras {
                 ", privilegio=" + privilegio +
                 '}';
     }
+    public static List<FormReservaHoras> resultado = new LinkedList<>();
+    static {
+        Connection connection;
+        try {
+            ConnectionManager.obtenerConexion();
+        } catch (SQLException e) {
+            System.out.println (e);
+        }
+    }
+
 }
